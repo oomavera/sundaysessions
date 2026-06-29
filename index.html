@@ -111,15 +111,13 @@
       to { transform: translateX(0); }
     }
 
-    @keyframes buttonGlow {
+    @keyframes buttonPulse {
       0%,
       100% {
-        opacity: .28;
-        transform: scale(.96);
+        transform: scale(1);
       }
       50% {
-        opacity: .72;
-        transform: scale(1.08);
+        transform: scale(1.035);
       }
     }
 
@@ -141,8 +139,6 @@
 
     .join-button {
       position: relative;
-      z-index: 0;
-      isolation: isolate;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -160,38 +156,8 @@
       text-decoration: none;
       text-transform: uppercase;
       transition: transform .18s ease, background .18s ease, color .18s ease;
-    }
-
-    .join-button::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      inset: -9px;
-      border-radius: 8px;
-      background: rgba(0, 87, 255, .72);
-      filter: blur(14px);
-      pointer-events: none;
-      animation: buttonGlow 1.8s ease-in-out infinite;
-    }
-
-    .join-button::before {
-      content: "";
-      position: absolute;
-      z-index: 0;
-      inset: 0;
-      background: var(--ink);
-      pointer-events: none;
-      transition: background .18s ease;
-    }
-
-    .join-button span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .join-button:hover::before,
-    .join-button:focus-visible::before {
-      background: var(--paper);
+      animation: revealDetails 1.6s 1.25s ease-in-out both,
+        buttonPulse 1.5s 3s ease-in-out infinite;
     }
 
     .join-button:hover,
@@ -645,9 +611,6 @@
         animation: none;
       }
 
-      .join-button::after {
-        animation: none;
-      }
     }
   </style>
 </head>
