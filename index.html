@@ -98,8 +98,12 @@
     }
 
     @keyframes glideTitle {
-      from { transform: translateY(var(--title-start-y, 0)); }
-      to { transform: translateY(0); }
+      from {
+        transform:
+          translate(var(--title-start-x, 0), var(--title-start-y, 0))
+          scale(1.08);
+      }
+      to { transform: translate(0, 0) scale(1); }
     }
 
     .eyebrow {
@@ -305,7 +309,11 @@
       }
 
       h1 {
-        text-align: center;
+        display: inline-block;
+        width: min-content;
+        max-width: 100%;
+        text-align: left;
+        transform-origin: center;
       }
 
       .intro-ready h1 {
@@ -623,8 +631,10 @@
 
       const setTitleStart = () => {
         const rect = title.getBoundingClientRect();
-        const offset = (window.innerHeight / 2) - (rect.top + rect.height / 2);
-        title.style.setProperty("--title-start-y", `${offset}px`);
+        const offsetX = (window.innerWidth / 2) - (rect.left + rect.width / 2);
+        const offsetY = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+        title.style.setProperty("--title-start-x", `${offsetX}px`);
+        title.style.setProperty("--title-start-y", `${offsetY}px`);
       };
 
       setTitleStart();
