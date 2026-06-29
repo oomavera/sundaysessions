@@ -174,6 +174,26 @@
       animation: buttonGlow 1.8s ease-in-out infinite;
     }
 
+    .join-button::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background: var(--ink);
+      pointer-events: none;
+      transition: background .18s ease;
+    }
+
+    .join-button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .join-button:hover::before,
+    .join-button:focus-visible::before {
+      background: var(--paper);
+    }
+
     .join-button:hover,
     .join-button:focus-visible {
       background: transparent;
@@ -639,14 +659,14 @@
         <h1><span>Sunday</span> <span>Sessions</span></h1>
         <p class="lede">A bold one-hour class built for worship, community, and growth.</p>
         <div class="tagline">Christian hip hop only / Momentum Dance Complex</div>
-        <a class="join-button desktop-cta" href="https://buy.stripe.com/5kQeVe3j14TR60Y08e5c400">Join Us!</a>
+        <a class="join-button desktop-cta" href="https://buy.stripe.com/5kQeVe3j14TR60Y08e5c400"><span>Join Us!</span></a>
       </header>
 
       <section class="middle" aria-label="Class description">
         <div class="statement">
           <h2>Move With Purpose</h2>
           <p class="body-copy">Christian hip hop dance classes hosted as a monthly pop-up at Momentum Dance Complex.</p>
-          <a class="join-button mobile-cta" href="https://buy.stripe.com/5kQeVe3j14TR60Y08e5c400">Join Us!</a>
+          <a class="join-button mobile-cta" href="https://buy.stripe.com/5kQeVe3j14TR60Y08e5c400"><span>Join Us!</span></a>
         </div>
         <div class="badge" aria-label="One hour class">
           <div>
