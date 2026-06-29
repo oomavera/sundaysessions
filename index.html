@@ -97,6 +97,11 @@
       to { opacity: 1; }
     }
 
+    @keyframes glideTitle {
+      from { transform: translateY(var(--title-start-y, 0)); }
+      to { transform: translateY(0); }
+    }
+
     .eyebrow {
       display: flex;
       align-items: center;
@@ -301,6 +306,12 @@
 
       h1 {
         text-align: center;
+      }
+
+      .intro-ready h1 {
+        position: relative;
+        z-index: 2;
+        animation: glideTitle 1.6s 1.25s cubic-bezier(.22, .72, .26, 1) both;
       }
 
       .middle {
@@ -556,6 +567,10 @@
       .details {
         animation: none;
       }
+
+      .intro-ready h1 {
+        animation: none;
+      }
     }
   </style>
 </head>
@@ -601,5 +616,20 @@
       </section>
     </section>
   </main>
+  <script>
+    (() => {
+      const title = document.querySelector("h1");
+      if (!title || !window.matchMedia("(max-width: 720px)").matches) return;
+
+      const setTitleStart = () => {
+        const rect = title.getBoundingClientRect();
+        const offset = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+        title.style.setProperty("--title-start-y", `${offset}px`);
+      };
+
+      setTitleStart();
+      document.documentElement.classList.add("intro-ready");
+    })();
+  </script>
 </body>
 </html>
