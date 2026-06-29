@@ -630,15 +630,19 @@
       if (!title || !window.matchMedia("(max-width: 720px)").matches) return;
 
       const setTitleStart = () => {
+        const previousAnimation = title.style.animation;
+        title.style.animation = "none";
         const rect = title.getBoundingClientRect();
         const offsetX = (window.innerWidth / 2) - (rect.left + rect.width / 2);
         const offsetY = (window.innerHeight / 2) - (rect.top + rect.height / 2);
         title.style.setProperty("--title-start-x", `${offsetX}px`);
         title.style.setProperty("--title-start-y", `${offsetY}px`);
+        title.style.animation = previousAnimation;
       };
 
       setTitleStart();
       document.documentElement.classList.add("intro-ready");
+      document.fonts.ready.then(setTitleStart);
     })();
   </script>
 </body>
