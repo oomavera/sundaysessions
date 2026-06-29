@@ -106,11 +106,6 @@
       to { transform: translate(0, 0) scale(1); }
     }
 
-    @keyframes alignTitleLeft {
-      from { transform: translateX(var(--sunday-center-x, 0)); }
-      to { transform: translateX(0); }
-    }
-
     @keyframes buttonPulse {
       0%,
       100% {
@@ -327,10 +322,11 @@
       }
 
       h1 {
-        display: inline-block;
+        display: block;
         width: min-content;
         max-width: 100%;
-        text-align: left;
+        margin-inline: auto;
+        text-align: center;
         transform-origin: center;
       }
 
@@ -343,10 +339,7 @@
       h1 span {
         display: block;
         width: fit-content;
-      }
-
-      .intro-ready h1 span:first-child {
-        animation: alignTitleLeft 1.6s 1.25s cubic-bezier(.22, .72, .26, 1) both;
+        margin-inline: auto;
       }
 
       .middle {
@@ -607,10 +600,6 @@
         animation: none;
       }
 
-      .intro-ready h1 span:first-child {
-        animation: none;
-      }
-
     }
   </style>
 </head>
@@ -665,11 +654,8 @@
         const previousAnimation = title.style.animation;
         title.style.animation = "none";
         const rect = title.getBoundingClientRect();
-        const firstLine = title.querySelector("span");
-        const firstLineWidth = firstLine ? firstLine.getBoundingClientRect().width : rect.width;
         const offsetX = (window.innerWidth / 2) - (rect.left + rect.width / 2);
         const offsetY = (window.innerHeight / 2) - (rect.top + rect.height / 2);
-        title.style.setProperty("--sunday-center-x", `${(rect.width - firstLineWidth) / 2}px`);
         title.style.setProperty("--title-start-x", `${offsetX}px`);
         title.style.setProperty("--title-start-y", `${offsetY}px`);
         title.style.animation = previousAnimation;
