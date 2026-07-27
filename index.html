@@ -948,6 +948,8 @@
         submitButton.disabled = !isSignupReady();
       };
 
+      const cleanPhoneForPortal = (phone) => phone.trim().replace(/[\s-]+/g, "");
+
       firstField.addEventListener("input", updateSubmitState);
       phoneField.addEventListener("input", updateSubmitState);
       updateSubmitState();
@@ -964,7 +966,7 @@
         const originalText = submitButton.textContent;
         const payload = {
           email: form.email.value.trim(),
-          phone: form.phone.value.trim(),
+          phone: cleanPhoneForPortal(form.phone.value),
           website: form.website.value
         };
 
