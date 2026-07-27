@@ -333,6 +333,11 @@
     }
 
     .subscribe-submit:disabled {
+      cursor: not-allowed;
+      opacity: .52;
+    }
+
+    .subscribe-submit.is-saving {
       cursor: wait;
       opacity: .72;
     }
@@ -853,7 +858,7 @@
         <label for="subscriber-phone">Phone</label>
         <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number" pattern="[+()\d\s.-]{7,24}" required>
       </div>
-      <button class="subscribe-submit" type="submit">Keep me in the loop</button>
+      <button class="subscribe-submit" type="submit" disabled>Keep me in the loop</button>
       <p class="subscribe-message subscribe-success" id="subscribe-success" role="status">You're on the list. We'll send the next class details soon.</p>
       <p class="subscribe-message subscribe-error" id="subscribe-error" role="alert">That did not save. Check your email and phone, then try again.</p>
     </form>
@@ -888,8 +893,9 @@
       const errorMessage = document.querySelector("#subscribe-error");
       const submitButton = document.querySelector(".subscribe-submit");
       const firstField = document.querySelector("#subscriber-email");
+      const phoneField = document.querySelector("#subscriber-phone");
 
-      if (!overlay || !form || !closeButton || !submitButton) return;
+      if (!overlay || !form || !closeButton || !submitButton || !firstField || !phoneField) return;
 
       const hidePopup = () => {
         overlay.classList.remove("is-closing");
@@ -919,8 +925,42 @@
         if (event.key === "Escape") hidePopup();
       });
 
+      const isPhoneValid = () => {
+        const phone = phoneField.value.trim();
+        const digitCount = (phone.match(/\d/g) || []).length;
+        return /^[+()\d\s.-]{7,24}$/.test(phone) && digitCount >= 7;
+      };
+
+      const updatePhoneValidity = () => {
+        const phone = phoneField.value.trim();
+        const message = phone.length > 0 && !isPhoneValid()
+          ? "Enter a valid phone number."
+          : "";
+        phoneField.setCustomValidity(message);
+      };
+
+      const isSignupReady = () => {
+        updatePhoneValidity();
+        return firstField.validity.valid && phoneField.validity.valid;
+      };
+
+      const updateSubmitState = () => {
+        submitButton.disabled = !isSignupReady();
+      };
+
+      firstField.addEventListener("input", updateSubmitState);
+      phoneField.addEventListener("input", updateSubmitState);
+      updateSubmitState();
+
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
+        updateSubmitState();
+
+        if (!isSignupReady()) {
+          form.reportValidity();
+          return;
+        }
+
         const originalText = submitButton.textContent;
         const payload = {
           email: form.email.value.trim(),
@@ -930,6 +970,7 @@
 
         submitButton.textContent = "Saving...";
         submitButton.disabled = true;
+        submitButton.classList.add("is-saving");
         successMessage?.classList.remove("visible");
         errorMessage?.classList.remove("visible");
 
@@ -956,7 +997,8 @@
           fadePopupAway();
         } catch {
           submitButton.textContent = originalText;
-          submitButton.disabled = false;
+          submitButton.classList.remove("is-saving");
+          updateSubmitState();
           errorMessage?.classList.add("visible");
         }
       });
