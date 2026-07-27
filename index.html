@@ -119,7 +119,7 @@
     @keyframes popupIn {
       from {
         opacity: 0;
-        transform: translateY(18px) scale(.98);
+        transform: translateY(24px) scale(.98);
       }
 
       to {
@@ -185,7 +185,9 @@
       display: none;
       place-items: center;
       padding: 20px;
-      background: rgba(16, 18, 20, .58);
+      background: rgba(16, 18, 20, .68);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .subscribe-overlay.visible {
@@ -199,7 +201,7 @@
       border: 2px solid var(--ink);
       background: var(--paper);
       box-shadow: 0 26px 70px rgba(0, 0, 0, .25);
-      animation: popupIn .32s ease both;
+      animation: popupIn 1.6s cubic-bezier(.22, .72, .26, 1) both;
     }
 
     .subscribe-close {
@@ -224,6 +226,7 @@
     }
 
     .subscribe-kicker {
+      display: none;
       margin: 0 44px 10px 0;
       color: var(--stone);
       font-size: 11px;
@@ -816,8 +819,8 @@
     <form class="subscribe-modal" id="subscribe-form">
       <button class="subscribe-close" type="button" aria-label="Close signup popup">&times;</button>
       <p class="subscribe-kicker">Stay ready</p>
-      <h3 id="subscribe-title">Catch the next session first</h3>
-      <p class="subscribe-copy">Drop your phone and email to hear when and where the next Sunday Sessions class is happening.</p>
+      <h3 id="subscribe-title">Catch the next session</h3>
+      <p class="subscribe-copy">Stay up to date with upcoming classes, and details about how to join!</p>
       <div class="website-field" aria-hidden="true">
         <label for="website">Website</label>
         <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -878,7 +881,7 @@
         firstField?.focus({ preventScroll: true });
       };
 
-      window.setTimeout(showPopup, 2950);
+      window.setTimeout(showPopup, 1250);
 
       closeButton.addEventListener("click", hidePopup);
       overlay.addEventListener("click", (event) => {
