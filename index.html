@@ -116,6 +116,18 @@
       }
     }
 
+    @keyframes popupIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
     .eyebrow {
       display: flex;
       align-items: center;
@@ -164,6 +176,162 @@
 
     .desktop-cta {
       display: none;
+    }
+
+    .subscribe-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(16, 18, 20, .58);
+    }
+
+    .subscribe-overlay.visible {
+      display: grid;
+    }
+
+    .subscribe-modal {
+      position: relative;
+      width: min(100%, 430px);
+      padding: clamp(22px, 5vw, 30px);
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, .25);
+      animation: popupIn .32s ease both;
+    }
+
+    .subscribe-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .subscribe-close:hover,
+    .subscribe-close:focus-visible {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .subscribe-kicker {
+      margin: 0 44px 10px 0;
+      color: var(--stone);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .subscribe-modal h3 {
+      margin: 0;
+      color: var(--blue);
+      font-family: "Anton", Impact, sans-serif;
+      font-size: clamp(38px, 8vw, 58px);
+      font-weight: 400;
+      line-height: .9;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .subscribe-copy {
+      margin: 14px 0 18px;
+      color: var(--deep);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .subscribe-field {
+      margin-bottom: 10px;
+    }
+
+    .subscribe-field label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--stone);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .subscribe-field input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 12px;
+      border: 2px solid var(--line);
+      border-radius: 0;
+      background: var(--white);
+      color: var(--ink);
+      font: 800 15px "Inter", Arial, sans-serif;
+    }
+
+    .subscribe-field input:focus {
+      border-color: var(--ink);
+      outline: 0;
+      box-shadow: 0 0 0 3px rgba(0, 87, 255, .14);
+    }
+
+    .website-field {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .subscribe-submit {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 4px;
+      border: 2px solid var(--ink);
+      background: var(--ink);
+      color: var(--white);
+      cursor: pointer;
+      font: 900 13px "Inter", Arial, sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .subscribe-submit:hover,
+    .subscribe-submit:focus-visible {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .subscribe-submit:disabled {
+      cursor: wait;
+      opacity: .72;
+    }
+
+    .subscribe-message {
+      display: none;
+      margin: 12px 0 0;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .subscribe-message.visible {
+      display: block;
+    }
+
+    .subscribe-success {
+      color: var(--deep);
+    }
+
+    .subscribe-error {
+      color: #8b2e2e;
     }
 
     .eyebrow::before {
@@ -644,6 +812,29 @@
       </section>
     </section>
   </main>
+  <div class="subscribe-overlay" id="subscribe-overlay" role="dialog" aria-modal="true" aria-labelledby="subscribe-title">
+    <form class="subscribe-modal" id="subscribe-form">
+      <button class="subscribe-close" type="button" aria-label="Close signup popup">&times;</button>
+      <p class="subscribe-kicker">Stay ready</p>
+      <h3 id="subscribe-title">Catch the next session first</h3>
+      <p class="subscribe-copy">Drop your phone and email to hear when and where the next Sunday Sessions class is happening.</p>
+      <div class="website-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="subscribe-field">
+        <label for="subscriber-email">Email</label>
+        <input id="subscriber-email" name="email" type="email" autocomplete="email" placeholder="Email address" required>
+      </div>
+      <div class="subscribe-field">
+        <label for="subscriber-phone">Phone</label>
+        <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number" pattern="[+()\d\s.-]{7,24}" required>
+      </div>
+      <button class="subscribe-submit" type="submit">Keep me in the loop</button>
+      <p class="subscribe-message subscribe-success" id="subscribe-success" role="status">You're on the list. We'll send the next class details soon.</p>
+      <p class="subscribe-message subscribe-error" id="subscribe-error" role="alert">That did not save. Check your email and phone, then try again.</p>
+    </form>
+  </div>
   <script>
     (() => {
       const title = document.querySelector("h1");
@@ -663,6 +854,83 @@
       setTitleStart();
       document.documentElement.classList.add("intro-ready");
       document.fonts.ready.then(setTitleStart);
+    })();
+
+    (() => {
+      const endpoint = "https://stripe-murex-nine.vercel.app/api/subscribe";
+      const overlay = document.querySelector("#subscribe-overlay");
+      const form = document.querySelector("#subscribe-form");
+      const closeButton = document.querySelector(".subscribe-close");
+      const successMessage = document.querySelector("#subscribe-success");
+      const errorMessage = document.querySelector("#subscribe-error");
+      const submitButton = document.querySelector(".subscribe-submit");
+      const firstField = document.querySelector("#subscriber-email");
+
+      if (!overlay || !form || !closeButton || !submitButton) return;
+
+      const hidePopup = () => {
+        overlay.classList.remove("visible");
+      };
+
+      const showPopup = () => {
+        if (window.localStorage.getItem("sundaySessionsSubscribed") === "true") return;
+        overlay.classList.add("visible");
+        firstField?.focus({ preventScroll: true });
+      };
+
+      window.setTimeout(showPopup, 2950);
+
+      closeButton.addEventListener("click", hidePopup);
+      overlay.addEventListener("click", (event) => {
+        if (event.target === overlay) hidePopup();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") hidePopup();
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const originalText = submitButton.textContent;
+        const payload = {
+          email: form.email.value.trim(),
+          phone: form.phone.value.trim(),
+          website: form.website.value
+        };
+
+        submitButton.textContent = "Saving...";
+        submitButton.disabled = true;
+        successMessage?.classList.remove("visible");
+        errorMessage?.classList.remove("visible");
+
+        try {
+          try {
+            const response = await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error("Unable to save");
+          } catch {
+            await fetch(endpoint, {
+              method: "POST",
+              mode: "no-cors",
+              body: new URLSearchParams(payload)
+            });
+          }
+
+          window.localStorage.setItem("sundaySessionsSubscribed", "true");
+          submitButton.textContent = "You're on the list";
+          successMessage?.classList.add("visible");
+          form.reset();
+          window.setTimeout(hidePopup, 1800);
+        } catch {
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+          errorMessage?.classList.add("visible");
+        }
+      });
     })();
   </script>
 </body>
