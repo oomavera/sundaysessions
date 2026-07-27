@@ -306,6 +306,12 @@
       box-shadow: 0 0 0 3px rgba(0, 87, 255, .14);
     }
 
+    .subscribe-field input.is-incomplete {
+      border-color: #dc8b8b;
+      background: #fff1f1;
+      box-shadow: 0 0 0 3px rgba(220, 139, 139, .2);
+    }
+
     .website-field {
       position: absolute;
       left: -9999px;
@@ -841,7 +847,7 @@
     </section>
   </main>
   <div class="subscribe-overlay" id="subscribe-overlay" role="dialog" aria-modal="true" aria-labelledby="subscribe-title">
-    <form class="subscribe-modal" id="subscribe-form">
+    <form class="subscribe-modal" id="subscribe-form" novalidate>
       <button class="subscribe-close" type="button" aria-label="Close signup popup">&times;</button>
       <p class="subscribe-kicker">Stay ready</p>
       <h3 id="subscribe-title">Catch the next session</h3>
@@ -852,11 +858,11 @@
       </div>
       <div class="subscribe-field">
         <label for="subscriber-email">Email</label>
-        <input id="subscriber-email" name="email" type="email" autocomplete="email" placeholder="Email address" required>
+        <input id="subscriber-email" name="email" type="email" autocomplete="email" placeholder="Email address">
       </div>
       <div class="subscribe-field">
         <label for="subscriber-phone">Phone</label>
-        <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number" pattern="[+()\d\s.-]{7,24}" required>
+        <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number">
       </div>
       <button class="subscribe-submit" type="submit" disabled>Keep me in the loop</button>
       <p class="subscribe-message subscribe-success" id="subscribe-success" role="status">You're on the list. We'll send the next class details soon.</p>
@@ -925,23 +931,28 @@
         if (event.key === "Escape") hidePopup();
       });
 
+      const emailPattern = /^[^\s@]+@[^\s@]+\.com$/i;
+
+      const isEmailValid = () => emailPattern.test(firstField.value.trim());
+
       const isPhoneValid = () => {
         const phone = phoneField.value.trim();
         const digitCount = (phone.match(/\d/g) || []).length;
-        return /^[+()\d\s.-]{7,24}$/.test(phone) && digitCount >= 7;
+        return /^[+()\d\s.-]{10,28}$/.test(phone) && digitCount >= 10;
       };
 
-      const updatePhoneValidity = () => {
-        const phone = phoneField.value.trim();
-        const message = phone.length > 0 && !isPhoneValid()
-          ? "Enter a valid phone number."
-          : "";
-        phoneField.setCustomValidity(message);
+      const updateFieldHighlight = (field, isValid) => {
+        const isIncomplete = field.value.trim().length > 0 && !isValid;
+        field.classList.toggle("is-incomplete", isIncomplete);
+        field.setAttribute("aria-invalid", isIncomplete ? "true" : "false");
       };
 
       const isSignupReady = () => {
-        updatePhoneValidity();
-        return firstField.validity.valid && phoneField.validity.valid;
+        const emailIsValid = isEmailValid();
+        const phoneIsValid = isPhoneValid();
+        updateFieldHighlight(firstField, emailIsValid);
+        updateFieldHighlight(phoneField, phoneIsValid);
+        return emailIsValid && phoneIsValid;
       };
 
       const updateSubmitState = () => {
@@ -959,7 +970,6 @@
         updateSubmitState();
 
         if (!isSignupReady()) {
-          form.reportValidity();
           return;
         }
 
