@@ -931,7 +931,7 @@
         if (event.key === "Escape") hidePopup();
       });
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.com$/i;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
       const isEmailValid = () => emailPattern.test(firstField.value.trim());
 
