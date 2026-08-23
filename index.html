@@ -230,7 +230,7 @@
       right: 12px;
       width: 36px;
       height: 36px;
-      border: 2px solid var(--ink);
+      border: 0;
       background: transparent;
       color: var(--ink);
       cursor: pointer;
@@ -241,8 +241,9 @@
 
     .subscribe-close:hover,
     .subscribe-close:focus-visible {
-      background: var(--ink);
-      color: var(--white);
+      background: transparent;
+      color: var(--blue);
+      outline: 0;
     }
 
     .subscribe-kicker {
@@ -387,8 +388,12 @@
 
     .subscribe-success-title {
       margin-bottom: 8px;
-      color: var(--blue);
+      color: var(--ink);
       font-size: 1.35em;
+    }
+
+    .subscribe-success-detail {
+      color: var(--blue);
     }
 
     .subscribe-error {
