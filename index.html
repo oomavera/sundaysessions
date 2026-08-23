@@ -998,7 +998,8 @@
           window.localStorage.setItem("sundaySessionsSubscribed", "true");
           submitButton.textContent = "Check your inbox";
           form.reset();
-          fadePopupAway();
+          successMessage?.classList.add("visible");
+          window.setTimeout(fadePopupAway, 2400);
         } catch {
           submitButton.textContent = originalText;
           submitButton.classList.remove("is-saving");
