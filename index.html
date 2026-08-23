@@ -374,9 +374,21 @@
 
     .subscribe-modal.is-success .subscribe-success {
       display: block;
-      margin: 22px 42px 2px 0;
+      margin: 22px 0 2px;
       font-size: clamp(15px, 3.4vw, 18px);
       line-height: 1.5;
+      text-align: center;
+    }
+
+    .subscribe-success-title,
+    .subscribe-success-detail {
+      display: block;
+    }
+
+    .subscribe-success-title {
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 1.35em;
     }
 
     .subscribe-error {
@@ -884,7 +896,7 @@
         <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number">
       </div>
       <button class="subscribe-submit" type="submit" disabled>Keep me in the loop</button>
-      <p class="subscribe-message subscribe-success" id="subscribe-success" role="status">Check your inbox for a confirmation from Sunday Sessions. If you do not see it, check Spam or Promotions, mark it as not spam, and add hello@sundaysessions.us to your contacts.</p>
+      <p class="subscribe-message subscribe-success" id="subscribe-success" role="status"><span class="subscribe-success-title">Thank You!</span><span class="subscribe-success-detail">Double check your Junk/Spam for a confirmation email!</span></p>
       <p class="subscribe-message subscribe-error" id="subscribe-error" role="alert">That did not save. Check your email and phone, then try again.</p>
     </form>
   </div>
