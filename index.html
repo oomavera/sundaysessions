@@ -900,6 +900,8 @@
       const submitButton = document.querySelector(".subscribe-submit");
       const firstField = document.querySelector("#subscriber-email");
       const phoneField = document.querySelector("#subscriber-phone");
+      const subscribedStorageKey = "sundaySessionsSubscribed";
+      const subscribedCookieName = "sundaySessionsSubscribed";
 
       if (!overlay || !form || !closeButton || !submitButton || !firstField || !phoneField) return;
 
@@ -914,8 +916,33 @@
         window.setTimeout(hidePopup, 420);
       };
 
+      const hasAlreadySubscribed = () => {
+        try {
+          if (window.localStorage.getItem(subscribedStorageKey) === "true") return true;
+        } catch {
+          // Some in-app browsers can block storage while still allowing cookies.
+        }
+
+        return document.cookie
+          .split(";")
+          .map((cookie) => cookie.trim())
+          .includes(`${subscribedCookieName}=true`);
+      };
+
+      const rememberSubscription = () => {
+        try {
+          window.localStorage.setItem(subscribedStorageKey, "true");
+        } catch {
+          // The first-party cookie below is the fallback for restricted browsers.
+        }
+
+        if (window.location.hostname === "sundaysessions.us" || window.location.hostname.endsWith(".sundaysessions.us")) {
+          document.cookie = `${subscribedCookieName}=true; Max-Age=31536000; Path=/; Domain=sundaysessions.us; SameSite=Lax; Secure`;
+        }
+      };
+
       const showPopup = () => {
-        if (window.localStorage.getItem("sundaySessionsSubscribed") === "true") return;
+        if (hasAlreadySubscribed()) return;
         overlay.classList.add("visible");
         firstField?.focus({ preventScroll: true });
       };
@@ -995,7 +1022,7 @@
 
           if (!response.ok) throw new Error("Unable to save");
 
-          window.localStorage.setItem("sundaySessionsSubscribed", "true");
+          rememberSubscription();
           submitButton.textContent = "Check your inbox";
           form.reset();
           successMessage?.classList.add("visible");
