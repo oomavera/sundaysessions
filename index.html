@@ -364,6 +364,21 @@
       color: var(--deep);
     }
 
+    .subscribe-modal.is-success .subscribe-copy,
+    .subscribe-modal.is-success .subscribe-field,
+    .subscribe-modal.is-success .website-field,
+    .subscribe-modal.is-success .subscribe-submit,
+    .subscribe-modal.is-success .subscribe-error {
+      display: none;
+    }
+
+    .subscribe-modal.is-success .subscribe-success {
+      display: block;
+      margin: 22px 42px 2px 0;
+      font-size: clamp(15px, 3.4vw, 18px);
+      line-height: 1.5;
+    }
+
     .subscribe-error {
       color: #8b2e2e;
     }
@@ -914,12 +929,6 @@
         overlay.classList.remove("visible");
       };
 
-      const fadePopupAway = () => {
-        overlay.classList.add("is-closing");
-        overlay.classList.remove("visible");
-        window.setTimeout(hidePopup, 420);
-      };
-
       const hasAlreadySubscribed = () => {
         try {
           if (window.localStorage.getItem(subscribedStorageKey) === "true") return true;
@@ -955,11 +964,11 @@
 
       closeButton.addEventListener("click", hidePopup);
       overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) hidePopup();
+        if (event.target === overlay && !form.classList.contains("is-success")) hidePopup();
       });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") hidePopup();
+        if (event.key === "Escape" && !form.classList.contains("is-success")) hidePopup();
       });
 
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -1027,10 +1036,10 @@
           if (!response.ok) throw new Error("Unable to save");
 
           rememberSubscription();
-          submitButton.textContent = "Check your inbox";
           form.reset();
+          form.classList.add("is-success");
           successMessage?.classList.add("visible");
-          window.setTimeout(fadePopupAway, 2400);
+          closeButton.focus({ preventScroll: true });
         } catch {
           submitButton.textContent = originalText;
           submitButton.classList.remove("is-saving");
