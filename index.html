@@ -940,6 +940,13 @@
       const phoneField = document.querySelector("#subscriber-phone");
       const subscribedStorageKey = "sundaySessionsSubscribed";
       const subscribedCookieName = "sundaySessionsSubscribed";
+      const pageUrl = new URL(window.location.href);
+      const forceSignup = pageUrl.searchParams.get("subscribe") === "1";
+
+      if (forceSignup) {
+        pageUrl.searchParams.delete("subscribe");
+        window.history.replaceState({}, "", `${pageUrl.pathname}${pageUrl.search}${pageUrl.hash}`);
+      }
 
       if (!overlay || !form || !closeButton || !submitButton || !firstField || !phoneField) return;
 
@@ -974,7 +981,7 @@
       };
 
       const showPopup = () => {
-        if (hasAlreadySubscribed()) return;
+        if (!forceSignup && hasAlreadySubscribed()) return;
         overlay.classList.add("visible");
         firstField?.focus({ preventScroll: true });
       };
