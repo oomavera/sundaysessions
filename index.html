@@ -889,8 +889,8 @@
       <h3 id="subscribe-title">Catch the next session</h3>
       <p class="subscribe-copy">Stay up to date with upcoming classes, and details about how to join!</p>
       <div class="website-field" aria-hidden="true">
-        <label for="website">Website</label>
-        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        <label for="signup-confirmation-code">Signup verification</label>
+        <input id="signup-confirmation-code" name="signup_confirmation_code" type="text" tabindex="-1" autocomplete="new-password" data-lpignore="true" data-1p-ignore readonly>
       </div>
       <div class="subscribe-field">
         <label for="subscriber-email">Email</label>
@@ -1036,7 +1036,7 @@
         const payload = {
           email: form.email.value.trim(),
           phone: cleanPhoneForPortal(form.phone.value),
-          website: form.website.value
+          signupConfirmationCode: form.elements.signup_confirmation_code?.value || ""
         };
 
         submitButton.textContent = "Saving...";
