@@ -901,7 +901,7 @@
         <input id="subscriber-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone number">
       </div>
       <button class="subscribe-submit" type="submit" disabled>Keep me in the loop</button>
-      <p class="subscribe-message subscribe-success" id="subscribe-success" role="status"><span class="subscribe-success-title">Thank You!</span><span class="subscribe-success-detail">Double check your Junk/Spam for a confirmation email!</span></p>
+      <p class="subscribe-message subscribe-success" id="subscribe-success" role="status"><span class="subscribe-success-title" id="subscribe-success-title">Thank You!</span><span class="subscribe-success-detail" id="subscribe-success-detail">Double check your Junk/Spam for a confirmation email!</span></p>
       <p class="subscribe-message subscribe-error" id="subscribe-error" role="alert">That did not save. Check your email and phone, then try again.</p>
     </form>
   </div>
@@ -932,6 +932,8 @@
       const form = document.querySelector("#subscribe-form");
       const closeButton = document.querySelector(".subscribe-close");
       const successMessage = document.querySelector("#subscribe-success");
+      const successTitle = document.querySelector("#subscribe-success-title");
+      const successDetail = document.querySelector("#subscribe-success-detail");
       const errorMessage = document.querySelector("#subscribe-error");
       const submitButton = document.querySelector(".subscribe-submit");
       const firstField = document.querySelector("#subscriber-email");
@@ -1050,11 +1052,23 @@
             body: JSON.stringify(payload)
           });
 
-          if (!response.ok) throw new Error("Unable to save");
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(result.error || "Unable to save");
 
           rememberSubscription();
           form.reset();
           form.classList.add("is-success");
+
+          if (result.alreadySaved || result.confirmationEmailExpected === false) {
+            if (successTitle) successTitle.textContent = "You're Already Signed Up!";
+            if (successDetail) {
+              successDetail.textContent = "Kit only sends one confirmation email. Search all mail, including Junk/Spam, for “Confirm your Sunday Sessions updates.”";
+            }
+          } else {
+            if (successTitle) successTitle.textContent = "Thank You!";
+            if (successDetail) successDetail.textContent = "Double check your Junk/Spam for a confirmation email!";
+          }
+
           successMessage?.classList.add("visible");
           closeButton.focus({ preventScroll: true });
         } catch {
